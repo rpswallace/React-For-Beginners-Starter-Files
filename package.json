@@ -4,9 +4,9 @@
   "private": true,
   "devDependencies": {
     "autoprefixer-stylus": "0.10.0",
+    "bootstrap": "^4.0.0-alpha.5",
     "concurrently": "3.0.0",
-    "react-scripts": "0.6.1",
-    "stylus": "0.54.5"
+    "react-scripts": "0.6.1"
   },
   "dependencies": {
     "history": "4.2.0",
@@ -18,11 +18,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "watch": "concurrently --names 'webpack, stylus' --prefix name 'npm run start' 'npm run styles:watch'",
+    "watch": "concurrently --names 'webpack, sass' --prefix name 'npm run start' 'npm run styles' 'npm run styles:bootstrap' 'npm run styles:watch'",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "styles": "stylus -u autoprefixer-stylus ./src/css/style.styl -o ./src/css/style.css",
-    "styles:watch": "stylus -u autoprefixer-stylus -w ./src/css/style.styl -o ./src/css/style.css"
+    "styles": "sass src/scss/main.scss src/css/main.css",
+    "styles:bootstrap": "sass ./node_modules/bootstrap/scss/bootstrap.scss src/css/vendors.css",
+    "styles:watch": "sass --watch src/scss:src/css ./node_modules/bootstrap/scss/bootstrap.scss:src/css/vendors.css",
+    "deploy": "ns ./build --cmd 'list ./content -s'"
   },
   "eslintConfig": {
     "extends": "./node_modules/react-scripts/config/eslint.js"
