@@ -1,8 +1,5 @@
 import React from 'react';
-// import Header from './Header';
 import Order from './Order';
-// import Inventory from './Inventory';
-// import Fish from './Fish';
 import sampleOrders from '../sample-orders';
 import base from '../base';
 
@@ -20,7 +17,7 @@ class App extends React.Component{
       // getinitialstate
       this.state = {
         fishes: {},
-        order: {}
+        orders: sampleOrders
       };
     }
     // React Lifecyle method
@@ -112,21 +109,9 @@ class App extends React.Component{
     }
     render(){
         return (
-            <div className="catch-of-the-day">
-                <div className="menu">
-                    <ul className="list-of-fishes">
-                        {
-                            // map is for array's and this.state.fishes is an Object, so we use keys to get an array of keys and then use map
-                            // key={key} is for react and index={key} is for my personal use, is not required.
-                            // Object
-                            //     .keys(this.state.fishes)
-                            //     .map(key => <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder}/>)
-                        }
-                    </ul>
-                </div>
+            <div className="row">
                 <Order 
-                    fishes={this.state.fishes} 
-                    order={this.state.order}
+                    orders={this.state.orders}
                     params={this.props.params}
                     removeFromOrder={this.removeFromOrder}
                 />
