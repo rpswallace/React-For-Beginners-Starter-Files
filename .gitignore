@@ -2,3 +2,7 @@ node_modules/
 .sass-cache/
 *.zip
 .DS_Store
+src/css/main.css
+src/css/main.css.map
+src/css/vendors.css
+src/css/vendors.css.map
