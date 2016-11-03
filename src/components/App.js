@@ -1,5 +1,6 @@
 import React from 'react';
-import Order from './Order';
+import Order from './orders/Order';
+import Nav from './Nav';
 import sampleOrders from '../sample-orders';
 import base from '../base';
 
@@ -126,6 +127,7 @@ class App extends React.Component{
     render(){
         return (
             <div className="row">
+                <Nav/>
                 <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
                 <Order 
                     orders={this.state.orders}
