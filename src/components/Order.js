@@ -20,7 +20,7 @@ class Order extends React.Component{
             return <li key={key}>Sorry, {order ? order.name : 'order'} is not longer available! {removeButton}</li>
         }
         return(
-            <div className="col-xs-12 col-sm-4" key={key}>
+            <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={key}>
             <div className={'card card-inverse ' + orderStatus}>
               <div className="card-block">
                 <h4 className="card-title">{order.clientName}</h4>
@@ -33,7 +33,7 @@ class Order extends React.Component{
               </ul>
               <div className="card-block">
                 <a href="#" className="card-link">Details</a>
-                <a href="#" className="card-link glyphicon glyphicon-pencil">Edit</a>
+                <a href="#" className="card-link">Edit</a>
               </div>
             </div>
             </div>
@@ -55,7 +55,7 @@ class Order extends React.Component{
         // reduce needs a starting value, in this case from 0
         return (
               <CSSTransitionGroup 
-                  className="order col-xs-12"
+                  className="orders invisible col-xs-12"
                   component="div"
                   transitionName="order"
                   transitionEnterTimeout={500}

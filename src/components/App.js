@@ -14,37 +14,53 @@ class App extends React.Component{
       this.updateFish = this.updateFish.bind(this);
       this.removeFish = this.removeFish.bind(this);
 
+
       // getinitialstate
       this.state = {
         fishes: {},
-        orders: sampleOrders
+        orders: {}
       };
     }
     // React Lifecyle method
     // facebook.github.io/react/docs/component-specs.html
     // This component runs right before the <App> is rendered.
     componentWillMount(){
-        this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {context: this, state: 'fishes'});
+
+
+        const DbRef = base.database().ref('orders');
+      DbRef.once('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            console.log(data);
+            this.setState({orders:data})
+            
+
+            document.getElementsByClassName('loading')[0].style.display = 'none';
+            document.getElementsByClassName('orders')[0].classList.remove('invisible');
+            
+        });
+
+
+        // this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {context: this, state: 'fishes'});
 
         // check if there is any order in localStorage
-        const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
+        // const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
 
-        if(localStorage){
-            // update our App component order state
-            if(JSON.parse(localStorageRef)){
-                this.setState({
-                    order: JSON.parse(localStorageRef)
-                })
-            }
-        }
+        // if(localStorage){
+        //     // update our App component order state
+        //     if(JSON.parse(localStorageRef)){
+        //         this.setState({
+        //             order: JSON.parse(localStorageRef)
+        //         })
+        //     }
+        // }
     }
     componentWillUnmount(){
-        base.removeBinding(this.ref);
+        // base.removeBinding(this.ref);
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){
         // Using {} actually will go directly to the object
-        localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
+        // localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
     }
     addFish(fish){
         // It's a good practice clone initial state
@@ -110,6 +126,7 @@ class App extends React.Component{
     render(){
         return (
             <div className="row">
+                <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
                 <Order 
                     orders={this.state.orders}
                     params={this.props.params}
