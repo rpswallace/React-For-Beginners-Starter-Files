@@ -3,24 +3,10 @@ import Order from './orders/Order';
 import Nav from './Nav';
 import base from '../base';
 
-// import connectToStores from '../connectToStores';
-// import OrderActions from '../actions/OrderActions';
-// import OrderStore from '../stores/OrderStore';
-
 class App extends React.Component{
-
-    // static getStores() {
-    //   return [OrderStore];
-    // }
-    
-    // static getPropsFromStores() {
-    //   return OrderStore.getState();
-    // }
-
     constructor() {
       super();
       // Bind functions to the app
-
 
       // getinitialstate
       this.state = {

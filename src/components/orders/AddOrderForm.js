@@ -1,31 +1,7 @@
 import React from 'react';
 import base from '../../base';
 
-// import connectToStores from '../../connectToStores';
-// import OrderActions from '../../actions/OrderActions';
-// import OrderStore from '../../stores/OrderStore';
-
 class AddOrderForm extends React.Component{
-    
-    // static getStores() {
-    //   return [OrderStore];
-    // }
-
-    // static getPropsFromStores() {
-    //   return OrderStore.getState();
-    // }
-
-    // constructor() {
-    //   super();
-    //   // Bind functions to the app
-
-
-    //   // getinitialstate
-    //   // this.state = {
-    //   //   orders: {}
-    //   // };
-    // }
-
     createOrder(e){
         e.preventDefault();
         const order = {
@@ -73,9 +49,9 @@ class AddOrderForm extends React.Component{
         this.orderForm.reset();
     }
     updateAmounts(e){
-      const balance = parseInt(document.getElementById('total').value, 10) - (parseInt(document.getElementById('payment1').value, 10) + (parseInt(document.getElementById('payment2').value, 10) || 0));
+      const balance = parseInt(document.getElementById('total').value, 10) - ((parseInt(document.getElementById('payment1').value, 10) || 0) + (parseInt(document.getElementById('payment2').value, 10) || 0));
 
-      if(balance){
+      if(!isNaN(balance)){
         document.getElementById('balance').value = balance;
       }
     }
@@ -140,15 +116,37 @@ class AddOrderForm extends React.Component{
       </div>
     </div>
     <div className="form-group row">
-      <label htmlFor="payment1" className="col-xs-12 col-form-label">Payment #1</label>
-      <div className="col-xs-12">
-        <input className="form-control" ref={(input) => this.payment1 = input} type="number" placeholder="Amount" id="payment1" onChange={(e) => this.updateAmounts(e)}/>
+      <div className="col-xs-6">
+        <label htmlFor="payment1" className="col-xs-12 col-form-label">Payment #1</label>
+        <div className="col-xs-12">
+          <input className="form-control" ref={(input) => this.payment1 = input} type="number" placeholder="Amount" id="payment1" onChange={(e) => this.updateAmounts(e)}/>
+        </div>
+      </div>
+      <div className="col-xs-6">
+        <label htmlFor="payment1Type" className="col-xs-12 col-form-label">Payment Type</label>
+        <div className="col-xs-12">
+            <select className="form-control" ref={(input) => this.payment1Type = input} id="payment1Type" >
+                <option value="Chash">Cash</option>
+                <option value="Transfer">Transfer</option>
+            </select>
+        </div>
       </div>
     </div>
     <div className="form-group row">
-      <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #2</label>
-      <div className="col-xs-12">
-        <input className="form-control" ref={(input) => this.payment2 = input} type="number" placeholder="Amount" id="payment2" onChange={(e) => this.updateAmounts(e)}/>
+      <div className="col-xs-6">
+        <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #1</label>
+        <div className="col-xs-12">
+          <input className="form-control" ref={(input) => this.payment2 = input} type="number" placeholder="Amount" id="payment2" onChange={(e) => this.updateAmounts(e)}/>
+        </div>
+      </div>
+      <div className="col-xs-6">
+        <label htmlFor="payment2Type" className="col-xs-12 col-form-label">Payment Type</label>
+        <div className="col-xs-12">
+            <select className="form-control" ref={(input) => this.payment2Type = input} id="payment2Type" >
+                <option value="Chash">Cash</option>
+                <option value="Transfer">Transfer</option>
+            </select>
+        </div>
       </div>
     </div>
     <div className="form-group row">
