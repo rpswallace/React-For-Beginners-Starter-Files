@@ -20,20 +20,20 @@ class App extends React.Component{
     componentWillMount(){
 
       const DbRef = base.database().ref('orders');
-        DbRef.once('value', (snapshot) => {
-          const data = snapshot.val() || {};
-          
-          // OrderActions.updateOrder(data)
-          this.setState({orders:data});
+      DbRef.on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        
+        // OrderActions.updateOrder(data)
+        this.setState({orders:data});
 
-          document.getElementsByClassName('loading')[0].style.display = 'none';
-          document.getElementsByClassName('orders')[0].classList.remove('invisible');
+        document.getElementsByClassName('loading')[0].style.display = 'none';
+        document.getElementsByClassName('orders')[0].classList.remove('invisible');
 
       });
 
     }
     componentWillUnmount(){
-        // base.removeBinding(this.ref);
+        base.removeBinding(this.DbRef);
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){

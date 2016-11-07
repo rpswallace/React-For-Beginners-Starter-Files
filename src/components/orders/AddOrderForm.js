@@ -15,35 +15,15 @@ class AddOrderForm extends React.Component{
             status: this.status.value,
             total: this.total.value,
             payment1: this.payment1.value,
+            payment1Type: this.payment1Type.value,
             payment2: this.payment2.value,
+            payment2Type: this.payment2Type.value,
             balance: this.balance.value
         }
-        // console.log(order);
 
-
-
-        // grab the store info
         const ordersRef = base.database().ref('orders');
-
         const timestamp = Date.now();
-        // orders[`order-${timestamp}`] = order;
-
         ordersRef.child(`order-${timestamp}`).set({order});
-
-        
-        // const DbRef = base.database().ref('orders');
-        // DbRef.once('value', (snapshot) => {
-        //   const data = snapshot.val() || {};
-
-        //   console.log(data);
-          
-        //   // OrderActions.updateOrder(data);
-        //   this.setState({orders:data});
-
-
-        // });
-
-
 
         // Clear form inputs after submission
         this.orderForm.reset();
@@ -134,7 +114,7 @@ class AddOrderForm extends React.Component{
     </div>
     <div className="form-group row">
       <div className="col-xs-6">
-        <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #1</label>
+        <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #2</label>
         <div className="col-xs-12">
           <input className="form-control" ref={(input) => this.payment2 = input} type="number" placeholder="Amount" id="payment2" onChange={(e) => this.updateAmounts(e)}/>
         </div>
