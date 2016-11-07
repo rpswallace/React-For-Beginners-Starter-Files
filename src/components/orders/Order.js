@@ -9,11 +9,11 @@ class Order extends React.Component{
     }
     // This is not a specific one from React, was made separate a bit the code.
     renderOrder(key){
-        const order = this.props.orders[key];
+        const order = this.props.orders[key].order;
         // const count = this.props.order[key];
         const removeButton = <button onClick={() => this.props.removeFromOrder(key)}>&times;</button>;
 
-        const orderStatus = (order.status) ? 'card-success' : 'card-warning';
+        const orderStatus = (parseInt(order.status, 10)) ? 'card-success' : 'card-warning';
             
 
         if(!order || order.status === 'unavailable'){
@@ -41,18 +41,6 @@ class Order extends React.Component{
     }
     render(){
         const orderIds = Object.keys(this.props.orders);
-        // const total = orderIds.reduce((prevTotal, key) => {
-        //     const fish = this.props.fishes[key];
-        //     const count = this.props.order[key];
-        //     const isAvailable = fish && fish.status === 'available';
-        //     if(isAvailable){
-        //         return prevTotal + (count * fish.price || 0);
-        //     }
-        //     else{
-        //         return prevTotal;
-        //     }
-        // }, 0)
-        // reduce needs a starting value, in this case from 0
         return (
               <CSSTransitionGroup 
                   className="orders invisible col-xs-12"
@@ -68,7 +56,6 @@ class Order extends React.Component{
 }
 
 Order.propTypes = {
-    // fishes: React.PropTypes.object.isRequired,
     orders: React.PropTypes.object.isRequired
     // removeFromOrder: React.PropTypes.func.isRequired
 }
