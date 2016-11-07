@@ -1,5 +1,7 @@
 import React from 'react';
 import Order from './orders/Order';
+import AddOrderForm from './orders/AddOrderForm';
+import OrderDetail from './orders/OrderDetail';
 import Nav from './Nav';
 import base from '../base';
 
@@ -7,10 +9,12 @@ class App extends React.Component{
     constructor() {
       super();
       // Bind functions to the app
+      this.getOrderDetail = this.getOrderDetail.bind(this);
 
       // getinitialstate
       this.state = {
-        orders: {}
+        orders: {},
+        order: {}
       };
     }
 
@@ -37,10 +41,16 @@ class App extends React.Component{
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){
-
-        console.log('componentWillUpdate', nextProps,nextState);
         // Using {} actually will go directly to the object
         // localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
+    }
+    getOrderDetail(e, key){
+      e.preventDefault();
+      const orders = {...this.state.orders};
+      const order = orders[key].order;
+      this.setState({
+        order: order
+      })
     }
     render(){
         return (
@@ -49,9 +59,14 @@ class App extends React.Component{
                 <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
                 <Order 
                     orders={this.state.orders}
+                    getOrderDetail={this.getOrderDetail}
                     // params={this.props.params}
                     // addOrder={this.addOrder}
                     // removeFromOrder={this.removeFromOrder}
+                />
+                <AddOrderForm />
+                <OrderDetail 
+                order={this.state.order} 
                 />
             </div>
         )

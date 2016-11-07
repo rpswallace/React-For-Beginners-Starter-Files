@@ -32,7 +32,7 @@ class Order extends React.Component{
                 <li className="list-group-item"><b>Address:</b> {order.shippingAddress}</li>
               </ul>
               <div className="card-block">
-                <a href="#" className="card-link">Details</a>
+                <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Details</a>
                 <a href="#" className="card-link">Edit</a>
               </div>
             </div>
@@ -43,7 +43,7 @@ class Order extends React.Component{
         const orderIds = Object.keys(this.props.orders);
         return (
               <CSSTransitionGroup 
-                  className="orders invisible col-xs-12"
+                  className="orders col-xs-12"
                   component="div"
                   transitionName="order"
                   transitionEnterTimeout={500}
