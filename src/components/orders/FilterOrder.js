@@ -26,7 +26,7 @@ class FilterOrder extends React.Component{
                 <option value="1">Confirm</option>
                 <option value="0">Not confirm</option>
             </select>
-            <button type="submit" className="btn btn-primary">Add Order</button>
+            <button type="submit" className="btn btn-primary">Filter</button>
           </form>
       )
   }
