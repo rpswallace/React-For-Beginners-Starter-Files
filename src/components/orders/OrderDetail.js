@@ -24,6 +24,7 @@ class OrderDetails extends React.Component{
           <li className="list-group-item"><b>payment1:</b> {details.payment1} - {details.payment1Type}</li>
           <li className="list-group-item"><b>payment2:</b> {details.payment2} - {details.payment2Type}</li>
           <li className="list-group-item"><b>balance:</b> {details.balance}</li>
+          <li className="list-group-item"><b>description:</b> {details.description}</li>
         </ul>
       </div>
     )

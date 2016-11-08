@@ -30,6 +30,7 @@ class Order extends React.Component{
                 <li className="list-group-item"><b>Delivery Date:</b> {order.deliveryDate}</li>
                 <li className="list-group-item"><b>Delivery Hour:</b> {order.deliveryHour}</li>
                 <li className="list-group-item"><b>Address:</b> {order.shippingAddress}</li>
+                <li className="list-group-item"><b>Description:</b> {order.description}</li>
               </ul>
               <div className="card-block">
                 <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Details</a>

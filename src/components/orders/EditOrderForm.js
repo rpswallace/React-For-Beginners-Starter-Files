@@ -22,7 +22,8 @@ class EditOrderForm extends React.Component{
         payment1Type: this.payment1Type.value,
         payment2: this.payment2.value,
         payment2Type: this.payment2Type.value,
-        balance: this.balance.value
+        balance: this.balance.value,
+        description: this.description.value
     }
 
     const ordersRef = base.database().ref('orders');
@@ -112,14 +113,14 @@ class EditOrderForm extends React.Component{
         <div className="form-group row">
           <label htmlFor="total" className="col-xs-12 col-form-label">Total</label>
           <div className="col-xs-12">
-            <input className="form-control" value={order.total} type="number" placeholder="Total" id="total" name="total"  onChange={(e) => this.updateAmounts(e)} />
+            <input className="form-control" value={order.total} type="number" placeholder="Total" id="total" name="total" onChange={(e) => this.updateAmounts(e)} />
           </div>
         </div>
         <div className="form-group row">
           <div className="col-xs-6">
             <label htmlFor="payment1" className="col-xs-12 col-form-label">Payment #1</label>
             <div className="col-xs-12">
-              <input className="form-control" value={order.payment1} type="number" placeholder="Amount" id="payment1" name="payment1"  onChange={(e) => this.updateAmounts(e)}/>
+              <input className="form-control" value={order.payment1} type="number" placeholder="Amount" id="payment1" name="payment1" onChange={(e) => this.updateAmounts(e)}/>
             </div>
           </div>
           <div className="col-xs-6">
@@ -136,7 +137,7 @@ class EditOrderForm extends React.Component{
           <div className="col-xs-6">
             <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #2</label>
             <div className="col-xs-12">
-              <input className="form-control" value={order.payment2} type="number" placeholder="Amount" id="payment2" name="payment2"  onChange={(e) => this.updateAmounts(e)}/>
+              <input className="form-control" value={order.payment2} type="number" placeholder="Amount" id="payment2" name="payment2" onChange={(e) => this.updateAmounts(e)}/>
             </div>
           </div>
           <div className="col-xs-6">
@@ -152,7 +153,13 @@ class EditOrderForm extends React.Component{
         <div className="form-group row">
           <label htmlFor="balance" className="col-xs-12 col-form-label">Balance</label>
           <div className="col-xs-12">
-            <input className="form-control" value={order.balance} type="number" placeholder="Amount" id="balance" name="balance"  onChange={(e) => this.updateAmounts(e)}/>
+            <input className="form-control" value={order.balance} type="number" placeholder="Amount" id="balance" name="balance" onChange={(e) => this.updateAmounts(e)}/>
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="description" className="col-xs-12 col-form-label">Description</label>
+          <div className="col-xs-12">
+            <textarea className="form-control" value={order.description} type="text" placeholder="Description" id="description" name="description"></textarea>
           </div>
         </div>
         <button type="submit" className="btn btn-primary">Save</button>
