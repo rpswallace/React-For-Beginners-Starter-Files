@@ -33,7 +33,7 @@ class Order extends React.Component{
               </ul>
               <div className="card-block">
                 <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Details</a>
-                <a href="#" className="card-link">Edit</a>
+                <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Edit</a>
               </div>
             </div>
             </div>
