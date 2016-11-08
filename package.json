@@ -6,7 +6,8 @@
     "autoprefixer-stylus": "0.10.0",
     "bootstrap": "^4.0.0-alpha.5",
     "concurrently": "3.0.0",
-    "react-scripts": "0.6.1"
+    "react-scripts": "0.6.1",
+    "reactfire": "^1.0.0"
   },
   "dependencies": {
     "history": "4.2.0",

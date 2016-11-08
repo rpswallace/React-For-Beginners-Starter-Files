@@ -1,135 +1,127 @@
 import React from 'react';
-// import Header from './Header';
-import Order from './Order';
-// import Inventory from './Inventory';
-// import Fish from './Fish';
-import sampleOrders from '../sample-orders';
+import Order from './orders/Order';
+import AddOrderForm from './orders/AddOrderForm';
+import EditOrderForm from './orders/EditOrderForm';
+import OrderDetail from './orders/OrderDetail';
+import FilterOrder from './orders/FilterOrder';
+import Nav from './Nav';
 import base from '../base';
 
 class App extends React.Component{
     constructor() {
       super();
       // Bind functions to the app
-      this.addFish = this.addFish.bind(this);
-      this.loadSamples = this.loadSamples.bind(this);
-      this.addToOrder = this.addToOrder.bind(this);
-      this.removeFromOrder = this.removeFromOrder.bind(this);
-      this.updateFish = this.updateFish.bind(this);
-      this.removeFish = this.removeFish.bind(this);
+      this.getOrderDetail = this.getOrderDetail.bind(this);
+      this.updateOrder = this.updateOrder.bind(this);
+      this.filterOrder = this.filterOrder.bind(this);
 
       // getinitialstate
       this.state = {
-        fishes: {},
+        orders: {},
         order: {}
       };
     }
+
     // React Lifecyle method
     // facebook.github.io/react/docs/component-specs.html
     // This component runs right before the <App> is rendered.
     componentWillMount(){
-        this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {context: this, state: 'fishes'});
 
-        // check if there is any order in localStorage
-        const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
+      const DbRef = base.database().ref('orders');
+      DbRef.on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        
+        this.setState({orders:data});
 
-        if(localStorage){
-            // update our App component order state
-            if(JSON.parse(localStorageRef)){
-                this.setState({
-                    order: JSON.parse(localStorageRef)
-                })
-            }
-        }
+        document.getElementsByClassName('loading')[0].style.display = 'none';
+        document.getElementsByClassName('orders')[0].classList.remove('invisible');
+
+      });
+
     }
     componentWillUnmount(){
-        base.removeBinding(this.ref);
+        base.removeBinding(this.DbRef);
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){
         // Using {} actually will go directly to the object
-        localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
+        // localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
     }
-    addFish(fish){
-        // It's a good practice clone initial state
-        // ... takes every item form a object and paste it into a new one, basically it makes a copy/clone.
-        const fishes = {...this.state.fishes}
-
-        // add in our new fish
-        const timestamp = Date.now();
-        fishes[`fish-${timestamp}`] = fish;
-        // update our state
-
-        // set state
-        // Other way to do it if the name is the same we can do this.setState({fishes})
-        this.setState({
-            fishes: fishes
-        })
-        
+    getOrderDetail(e, key){
+      e.preventDefault();
+      const orders = {...this.state.orders};
+      const order = orders[key].order;
+      this.setState({
+        order: order,
+        id: key
+      })
     }
-    updateFish(key, updatedFish){
-        const fishes = {...this.state.fishes};
-        fishes[key] = updatedFish;
-        this.setState({fishes});
-    }
-    removeFish(key){
-        const fishes = {...this.state.fishes};
-        fishes[key] = null;
-        this.setState({fishes});
-    }
-    loadSamples(){
-        this.setState({
-            orders: sampleOrders
+    filterOrder(dateFrom, dateTo, status){
+      console.log(dateFrom, dateTo, status);
+       
+      var ref = base.database().ref("orders");
+      ref.on("value", (snapshot) => {
+        const orders = snapshot.val() || {};
+        const orderIds = Object.keys(orders);
+        orderIds.filter(function (key) {
+          
+          if(dateFrom && dateTo){
+            if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
+            }
+            else{
+              delete orders[key]
+            }
+          }
+          else if(status == 1 || status == 0){
+           if(orders[key].order.status != status){
+              delete orders[key]
+            }
+          }
         });
-    }
-    addToOrder(key){
-        // Copy of the existing orders state
-        const order = {...this.state.order};
-        // update or add the new number of fish ordered
-        order[key] = order[key] + 1 || 1;
-        // update state
-        this.setState({order});
-    }
-    removeFromOrder(key){
-        // Mine 
-        // const order = {...this.state.order};
-        // const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
-        // if(localStorageRef){
-        //     const storeOrder = JSON.parse(localStorageRef);
-        //     if(storeOrder[key]){
-        //         delete storeOrder[key];
-        //     }
-        //     this.setState({
-        //         order: storeOrder
-        //     });
-        //     localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(storeOrder));
-        // }
+       
+        this.setState({orders});
+      });
 
-        // It not necessary update localStorage again because componentWillUpdate will runs when state or props change 
-        // Wes
-        const order = {...this.state.order};
-        delete order[key];
+    }
+    updateOrder(updatedOrder){
+        let order = {...this.state.order};
+        order = updatedOrder;
+
+        this.DbRef = base.database().ref('orders');
+        this.DbRef.child(this.state.id).set({order});
         this.setState({order});
     }
     render(){
         return (
-            <div className="catch-of-the-day">
-                <div className="menu">
-                    <ul className="list-of-fishes">
-                        {
-                            // map is for array's and this.state.fishes is an Object, so we use keys to get an array of keys and then use map
-                            // key={key} is for react and index={key} is for my personal use, is not required.
-                            // Object
-                            //     .keys(this.state.fishes)
-                            //     .map(key => <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder}/>)
-                        }
-                    </ul>
-                </div>
-                <Order 
-                    fishes={this.state.fishes} 
-                    order={this.state.order}
-                    params={this.props.params}
-                    removeFromOrder={this.removeFromOrder}
+            <div className="row">
+                <Nav/>
+                <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
+                <FilterOrder 
+                filterOrder={this.filterOrder}
                 />
+                <Order 
+                    orders={this.state.orders}
+                    getOrderDetail={this.getOrderDetail}
+                    // params={this.props.params}
+                    // addOrder={this.addOrder}
+                    // removeFromOrder={this.removeFromOrder}
+                />
+                
+
+                <OrderDetail 
+                order={this.state.order} 
+                />
+
+                
+                <EditOrderForm 
+                order={this.state.order}
+                updateOrder={this.updateOrder}
+                />
+                
+
+                <AddOrderForm />
+
+                
             </div>
         )
     }
@@ -140,3 +132,4 @@ App.propTypes = {
 }
 
 export default App;
+// export default connectToStores(App);
