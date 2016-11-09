@@ -1,8 +1,13 @@
 import React from 'react';
+// Orders
 import Order from './orders/Order';
 import AddOrderForm from './orders/AddOrderForm';
 import EditOrderForm from './orders/EditOrderForm';
 import OrderDetail from './orders/OrderDetail';
+// Products
+import Product from './products/Product';
+import AddProductForm from './products/AddProductForm';
+// Filters
 import FilterOrder from './orders/FilterOrder';
 import Nav from './Nav';
 import base from '../base';
@@ -18,7 +23,8 @@ class App extends React.Component{
       // getinitialstate
       this.state = {
         orders: {},
-        order: {}
+        order: {},
+        products: {}
       };
     }
 
@@ -38,9 +44,17 @@ class App extends React.Component{
 
       });
 
+      const DbRefProduct = base.database().ref('products');
+      DbRefProduct.on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        this.setState({products:data});
+        console.log(this.state.products)
+      });
+
     }
     componentWillUnmount(){
         base.removeBinding(this.DbRef);
+        base.removeBinding(this.DbRefProduct);
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){
@@ -96,30 +110,35 @@ class App extends React.Component{
             <div className="row">
                 <Nav/>
                 <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
+                
                 <FilterOrder 
                 filterOrder={this.filterOrder}
                 />
+                
                 <Order 
                     orders={this.state.orders}
                     getOrderDetail={this.getOrderDetail}
-                    // params={this.props.params}
-                    // addOrder={this.addOrder}
-                    // removeFromOrder={this.removeFromOrder}
                 />
                 
-
                 <OrderDetail 
                 order={this.state.order} 
                 />
-
                 
                 <EditOrderForm 
                 order={this.state.order}
                 updateOrder={this.updateOrder}
                 />
-                
 
-                <AddOrderForm />
+                <AddOrderForm 
+                products={this.state.products}
+                />
+               
+                <AddProductForm />
+
+                <Product 
+                products={this.state.products} 
+                getProductDetail={this.getProductDetail}
+                />
 
                 
             </div>
