@@ -108,7 +108,8 @@ class AddOrderForm extends React.Component{
             <label htmlFor="product" className="col-xs-12 col-form-label">Product</label>
             <div className="col-xs-12">
                 <select className="form-control" ref={(input) => this.product = input} id="product" name="product"  >
-                      {productIds.map(this.renderProducts)}
+                  <option value="">Select Product</option>
+                  {productIds.map(this.renderProducts)}
                 </select>
             </div>
         </div>

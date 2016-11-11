@@ -109,16 +109,38 @@ class App extends React.Component{
         return (
             <div className="row">
                 <Nav/>
-                <img src="../img/ring.svg" alt="loading" height="40" width="40" className="loading"/>
-                
-                <FilterOrder 
-                filterOrder={this.filterOrder}
-                />
-                
-                <Order 
+                <div className="tab-content">
+                  <div className="tab-pane active" id="orders" role="tabpanel">
+                    <FilterOrder 
+                    filterOrder={this.filterOrder}
+                    />
+                    <Order 
                     orders={this.state.orders}
                     getOrderDetail={this.getOrderDetail}
                 />
+
+                  </div>
+                  <div className="tab-pane" id="addOrders" role="tabpanel">
+                    <AddOrderForm 
+                      products={this.state.products}
+                    />
+                    </div>
+                  <div className="tab-pane" id="products" role="tabpanel">
+                    
+
+                    <Product 
+                      products={this.state.products} 
+                      getProductDetail={this.getProductDetail}
+                    />
+                  </div>
+
+                  <div className="tab-pane" id="addProducts" role="tabpanel">
+                  <AddProductForm />
+                  </div>
+                </div>
+                
+                
+                {/*
                 
                 <OrderDetail 
                 order={this.state.order} 
@@ -129,16 +151,8 @@ class App extends React.Component{
                 updateOrder={this.updateOrder}
                 />
 
-                <AddOrderForm 
-                products={this.state.products}
-                />
-               
-                <AddProductForm />
-
-                <Product 
-                products={this.state.products} 
-                getProductDetail={this.getProductDetail}
-                />
+                */}
+                
 
                 
             </div>
