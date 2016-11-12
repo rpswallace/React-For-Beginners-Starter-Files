@@ -8,7 +8,8 @@ class AddProductForm extends React.Component{
       name: this.name.value,
       price: this.price.value,
       status: this.status.value,
-      image: this.image.value
+      image: this.image.value,
+      type: this.type.value
     }
 
     const productsRef = base.database().ref('products');
@@ -46,6 +47,15 @@ class AddProductForm extends React.Component{
                 <select className="form-control" ref={(input) => this.status = input} id="status" name="status"  >
                     <option value="1">Available</option>
                     <option value="0">Not Available</option>
+                </select>
+            </div>
+        </div>
+        <div className="form-group row">
+            <label htmlFor="type" className="col-xs-12 col-form-label">Type</label>
+            <div className="col-xs-12">
+                <select className="form-control" ref={(input) => this.type = input} id="type" name="type"  >
+                    <option value="box">Box</option>
+                    <option value="bag">Bag</option>
                 </select>
             </div>
         </div>

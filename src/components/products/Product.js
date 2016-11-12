@@ -21,11 +21,12 @@ class Product extends React.Component{
         }
         return(
           <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3" key={key}>
-            <div className="card">
-              <img className="card-img-top" src="" alt="Card image cap" />
+            <div className={'card ' + productStatus}>
+              <img className="card-img-top" src="" role="presentation" />
               <div className="card-block">
                 <h4 className="card-title">{product.name}</h4>
                 <p className="card-text"><b>Price:</b> {product.price}</p>
+                <p className="card-text"><b>Type:</b> {product.type}</p>
                 <a href="#" className="card-link" onClick={(e) => this.props.getProductDetail(e, key) }>Details</a>
                 <a href="#" className="card-link" onClick={(e) => this.props.getProductDetail(e, key) }>Edit</a>
               </div>

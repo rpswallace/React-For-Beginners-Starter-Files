@@ -1,10 +1,20 @@
 import React from 'react';
 import base from '../../base';
+import $ from 'jquery';
 
 class AddOrderForm extends React.Component{
   constructor() {
     super();
-    this.renderProducts = this.renderProducts.bind(this);
+    this.renderProductsDropdown = this.renderProductsDropdown.bind(this);
+    this.handleProductChange = this.handleProductChange.bind(this);
+    this.updateOrderAmount = this.updateOrderAmount.bind(this);
+    this.renderProductList = this.renderProductList.bind(this);
+    this.totalOrder = 0;
+    this.orderProductList = {};
+
+    this.state = {
+      orderProductList: {}
+    }
   }
   createOrder(e){
       e.preventDefault();
@@ -40,17 +50,55 @@ class AddOrderForm extends React.Component{
       document.getElementById('balance').value = balance;
     }
   }
-  renderProducts(key){
+  updateOrderAmount(e, price){
+    const amount = parseInt(e.target.value, 10) * parseInt(price, 10);
+
+    this.totalOrder += amount;
+    console.log(this.totalOrder);
+  }
+  renderProductList(key){
+    // console.log(product.name)
+    const product = this.state.orderProductList[key].product;
+    console.log(product)
+    if(product){
+      return(
+        <li key={key}>
+          {product.name}
+          <input className="form-control" type="text" placeholder="Units" id="units" name="units" onChange={(e) => this.updateOrderAmount(e,product.price)}/>
+          <input className="form-control" type="text" placeholder="tape color" id="tape" name="tape" />
+          <input className="form-control" type="text" placeholder="paper color" id="paper" name="paper" />
+        </li>
+        )
+    }
+  }
+  handleProductChange(e){
+    if(e.target.value){
+      console.log(e.target.value);
+      const productsRef = base.database().ref('products').child(e.target.value);
+      productsRef.on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+
+        this.orderProductList[e.target.value] = data;
+        
+        this.setState({orderProductList:this.orderProductList});
+
+        // $('#order-product-list').append();
+        // $('#total').val(this.totalOrder);
+      });
+    }
+  }
+  renderProductsDropdown(key){
     const product = this.props.products[key].product;
 
     if(parseInt(product.status, 10) === 1){
       return(
-        <option key={key} value={product.name}>{product.name}</option>
+        <option key={key} value={key}>{product.name}</option>
       )
     }
   }
   render(){
     const productIds = Object.keys(this.props.products) || [];
+    const orderProductListIds = Object.keys(this.state.orderProductList) || [];
     return (
       <form ref={(input) => this.orderForm = input} className="order-edit" onSubmit={(e) => this.createOrder(e)}>
         <div className="form-group row">
@@ -107,12 +155,15 @@ class AddOrderForm extends React.Component{
         <div className="form-group row">
             <label htmlFor="product" className="col-xs-12 col-form-label">Product</label>
             <div className="col-xs-12">
-                <select className="form-control" ref={(input) => this.product = input} id="product" name="product"  >
+                <select className="form-control" ref={(input) => this.product = input} id="product" name="product" onChange={(e) => this.handleProductChange(e)} >
                   <option value="">Select Product</option>
-                  {productIds.map(this.renderProducts)}
+                  {productIds.map(this.renderProductsDropdown)}
                 </select>
             </div>
         </div>
+        <ul id="order-product-list">
+          {orderProductListIds.map(this.renderProductList)}
+        </ul>
         <div className="form-group row">
           <label htmlFor="total" className="col-xs-12 col-form-label">Total</label>
           <div className="col-xs-12">

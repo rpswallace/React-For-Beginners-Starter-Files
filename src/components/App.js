@@ -2,8 +2,8 @@ import React from 'react';
 // Orders
 import Order from './orders/Order';
 import AddOrderForm from './orders/AddOrderForm';
-import EditOrderForm from './orders/EditOrderForm';
-import OrderDetail from './orders/OrderDetail';
+// import EditOrderForm from './orders/EditOrderForm';
+// import OrderDetail from './orders/OrderDetail';
 // Products
 import Product from './products/Product';
 import AddProductForm from './products/AddProductForm';
@@ -39,7 +39,7 @@ class App extends React.Component{
         
         this.setState({orders:data});
 
-        document.getElementsByClassName('loading')[0].style.display = 'none';
+        // document.getElementsByClassName('loading')[0].style.display = 'none';
         document.getElementsByClassName('orders')[0].classList.remove('invisible');
 
       });
@@ -48,7 +48,6 @@ class App extends React.Component{
       DbRefProduct.on('value', (snapshot) => {
         const data = snapshot.val() || {};
         this.setState({products:data});
-        console.log(this.state.products)
       });
 
     }
@@ -71,30 +70,30 @@ class App extends React.Component{
       })
     }
     filterOrder(dateFrom, dateTo, status){
-      console.log(dateFrom, dateTo, status);
+      // console.log(dateFrom, dateTo, status);
        
-      var ref = base.database().ref("orders");
-      ref.on("value", (snapshot) => {
-        const orders = snapshot.val() || {};
-        const orderIds = Object.keys(orders);
-        orderIds.filter(function (key) {
+      // var ref = base.database().ref("orders");
+      // ref.on("value", (snapshot) => {
+      //   const orders = snapshot.val() || {};
+      //   const orderIds = Object.keys(orders);
+      //   orderIds.filter(function (key) {
           
-          if(dateFrom && dateTo){
-            if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
-            }
-            else{
-              delete orders[key]
-            }
-          }
-          else if(status == 1 || status == 0){
-           if(orders[key].order.status != status){
-              delete orders[key]
-            }
-          }
-        });
+      //     if(dateFrom && dateTo){
+      //       if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
+      //       }
+      //       else{
+      //         delete orders[key]
+      //       }
+      //     }
+      //     else if(status == 1 || status == 0){
+      //      if(orders[key].order.status != status){
+      //         delete orders[key]
+      //       }
+      //     }
+      //   });
        
-        this.setState({orders});
-      });
+      //   this.setState({orders});
+      // });
 
     }
     updateOrder(updatedOrder){
