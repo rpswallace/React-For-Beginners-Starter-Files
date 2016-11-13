@@ -51,20 +51,25 @@ class AddOrderForm extends React.Component{
     }
   }
   updateOrderAmount(e, price){
-    const amount = parseInt(e.target.value, 10) * parseInt(price, 10);
+    this.totalOrder = 0;
+    const that = this;
+    $('.order-product input.unit').filter(function() { 
+      if($(this).val() != ""){
+        that.totalOrder += (parseInt($(this).val(), 10)) * (parseInt($(this).data('price'), 10));
+      }
+    });
+    $('#total, #balance').val(that.totalOrder);
 
-    this.totalOrder += amount;
-    console.log(this.totalOrder);
   }
   renderProductList(key){
     // console.log(product.name)
     const product = this.state.orderProductList[key].product;
-    console.log(product)
+    // console.log(product)
     if(product){
       return(
-        <li key={key}>
+        <li key={key} className="order-product">
           {product.name}
-          <input className="form-control" type="text" placeholder="Units" id="units" name="units" onChange={(e) => this.updateOrderAmount(e,product.price)}/>
+          <input className="form-control unit" type="text" placeholder="Units" id="units" name="units" data-price={product.price} onChange={(e) => this.updateOrderAmount(e,product.price)}/>
           <input className="form-control" type="text" placeholder="tape color" id="tape" name="tape" />
           <input className="form-control" type="text" placeholder="paper color" id="paper" name="paper" />
         </li>
@@ -73,7 +78,7 @@ class AddOrderForm extends React.Component{
   }
   handleProductChange(e){
     if(e.target.value){
-      console.log(e.target.value);
+      // console.log(e.target.value);
       const productsRef = base.database().ref('products').child(e.target.value);
       productsRef.on('value', (snapshot) => {
         const data = snapshot.val() || {};
@@ -167,7 +172,7 @@ class AddOrderForm extends React.Component{
         <div className="form-group row">
           <label htmlFor="total" className="col-xs-12 col-form-label">Total</label>
           <div className="col-xs-12">
-            <input className="form-control" ref={(input) => this.total = input} type="number" placeholder="Total" id="total" name="total" onChange={(e) => this.updateAmounts(e)} />
+            <input className="form-control" ref={(input) => this.total = input} type="number" placeholder="Total" id="total" name="total" readOnly />
           </div>
         </div>
         <div className="form-group row">
@@ -207,7 +212,7 @@ class AddOrderForm extends React.Component{
         <div className="form-group row">
           <label htmlFor="balance" className="col-xs-12 col-form-label">Balance</label>
           <div className="col-xs-12">
-            <input className="form-control" ref={(input) => this.balance = input} type="number" placeholder="Amount" id="balance" name="balance" onChange={(e) => this.updateAmounts(e)}/>
+            <input className="form-control" ref={(input) => this.balance = input} type="number" placeholder="Amount" id="balance" name="balance" readOnly />
           </div>
         </div>
         <div className="form-group row">
