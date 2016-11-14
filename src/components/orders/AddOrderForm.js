@@ -50,29 +50,47 @@ class AddOrderForm extends React.Component{
       document.getElementById('balance').value = balance;
     }
   }
-  updateOrderAmount(e, price){
+  updateOrderAmount(e, price, key){
+
+    const orderProductList = this.state.orderProductList;
+    orderProductList[key].units = e.target.value || 1;
+    orderProductList[key].total = (parseInt(e.target.value || 1, 10)) * (parseInt(orderProductList[key].price, 10));
+
+    // update state
+    this.setState({orderProductList});
+
     this.totalOrder = 0;
     const that = this;
-    $('.order-product input.unit').filter(function() { 
-      if($(this).val() != ""){
-        that.totalOrder += (parseInt($(this).val(), 10)) * (parseInt($(this).data('price'), 10));
-      }
-    });
-    $('#total, #balance').val(that.totalOrder);
 
+    var orderProductListIds = Object.keys(orderProductList) || [];
+    orderProductListIds.map(function(item){
+      that.totalOrder += orderProductList[item].total;
+    });
+    $('#total').val(that.totalOrder);
+    // $('.order-product input.unit').filter(function() { 
+    //   if($(this).val() != ""){
+    //     that.totalOrder += (parseInt($(this).val(), 10)) * (parseInt($(this).data('price'), 10));
+    //   }
+    // });
+    var balance = parseInt(document.getElementById('total').value, 10) - ((parseInt(document.getElementById('payment1').value, 10) || 0) + (parseInt(document.getElementById('payment2').value, 10) || 0));
+    $('#balance').val(balance);
   }
   renderProductList(key){
-    // console.log(product.name)
-    const product = this.state.orderProductList[key].product;
-    // console.log(product)
+    const product = this.state.orderProductList[key];
     if(product){
+      // const totalPerProduct = parseInt(product.price, 10) * parseInt(product.units, 10);
       return(
-        <li key={key} className="order-product">
-          {product.name}
-          <input className="form-control unit" type="text" placeholder="Units" id="units" name="units" data-price={product.price} onChange={(e) => this.updateOrderAmount(e,product.price)}/>
-          <input className="form-control" type="text" placeholder="tape color" id="tape" name="tape" />
-          <input className="form-control" type="text" placeholder="paper color" id="paper" name="paper" />
-        </li>
+        <tr key={key} className="order-product">
+          <th scope="row">
+            <input className="form-control unit" type="text" placeholder="Units" id="units" name="units" data-price={product.price} defaultValue={product.units} onChange={(e) => this.updateOrderAmount(e,product.price, key)}/>
+          </th>
+          <td>{product.name}</td>
+          <td>{product.price}</td>
+          <td>{product.total}</td>
+          <td><input className="form-control" type="text" placeholder="paper color" id="desc" name="desc" /></td>
+          <td><input className="form-control" type="text" placeholder="tape color" id="tape" name="tape" /></td>
+          <td><input className="form-control" type="text" placeholder="paper color" id="paper" name="paper" /></td>
+        </tr>
         )
     }
   }
@@ -83,7 +101,17 @@ class AddOrderForm extends React.Component{
       productsRef.on('value', (snapshot) => {
         const data = snapshot.val() || {};
 
-        this.orderProductList[e.target.value] = data;
+        const temp = {
+          id: e.target.value,
+          name: data.product.name,
+          price: data.product.price,
+          units: 1,
+          tapeColor: '',
+          paperColor: '',
+          desc: '',
+          total: data.product.price * 1
+        }
+        this.orderProductList[e.target.value] = temp;
         
         this.setState({orderProductList:this.orderProductList});
 
@@ -166,9 +194,22 @@ class AddOrderForm extends React.Component{
                 </select>
             </div>
         </div>
-        <ul id="order-product-list">
-          {orderProductListIds.map(this.renderProductList)}
-        </ul>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Units</th>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Description</th>
+              <th>Tape Color</th>
+              <th>Paper Color</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderProductListIds.map(this.renderProductList)}
+          </tbody>
+        </table>
         <div className="form-group row">
           <label htmlFor="total" className="col-xs-12 col-form-label">Total</label>
           <div className="col-xs-12">
@@ -221,7 +262,7 @@ class AddOrderForm extends React.Component{
             <textarea className="form-control" ref={(input) => this.description = input} type="text" placeholder="Description" id="description" name="description"></textarea>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Add Order</button>
+        <button id="add-order" type="submit" className="btn btn-primary" disabled>Add Order</button>
       </form>
     )
   }
