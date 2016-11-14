@@ -33,7 +33,8 @@ class AddOrderForm extends React.Component{
           payment2: this.payment2.value,
           payment2Type: this.payment2Type.value,
           balance: this.balance.value,
-          description: this.description.value
+          description: this.description.value,
+          products: this.orderProductList
       }
 
       const ordersRef = base.database().ref('orders');
