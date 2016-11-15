@@ -3,16 +3,20 @@ import React from 'react';
 // Stateless functional component 
 const Nav = (props) => {
   return (
-   <nav className="navbar navbar-light bg-faded">
-      <ul className="nav navbar-nav">
-        <li className="nav-item active">
-          <a className="nav-link" href="/">Home <span className="sr-only">(current)</span></a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="addOrder">Add Order</a>
-        </li>
-      </ul>
-    </nav>
+    <ul className="nav nav-tabs" role="tablist" id="myTab">
+      <li className="nav-item">
+        <a className="nav-link active" data-toggle="tab" href="#orders" role="tab">Orders</a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="tab" href="#addOrders" role="tab">Add Orders</a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="tab" href="#products" role="tab">Products</a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="tab" href="#addProducts" role="tab">Add Products</a>
+      </li>
+    </ul>
     )
 }
 
