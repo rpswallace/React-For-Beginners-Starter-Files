@@ -77,29 +77,43 @@ class App extends React.Component{
     }
     filterOrder(dateFrom, dateTo, status){
       // console.log(dateFrom, dateTo, status);
+      // 
+      const filteredOrders = {};
        
-      // var ref = base.database().ref("orders");
-      // ref.on("value", (snapshot) => {
-      //   const orders = snapshot.val() || {};
-      //   const orderIds = Object.keys(orders);
-      //   orderIds.filter(function (key) {
+      var ref = base.database().ref("orders");
+      ref.on("value", (snapshot) => {
+        const orders = snapshot.val() || {};
+        const orderIds = Object.keys(orders);
+        orderIds.filter(function (key) {
+
           
-      //     if(dateFrom && dateTo){
-      //       if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
-      //       }
-      //       else{
-      //         delete orders[key]
-      //       }
-      //     }
-      //     else if(status == 1 || status == 0){
-      //      if(orders[key].order.status != status){
-      //         delete orders[key]
-      //       }
-      //     }
-      //   });
-       
-      //   this.setState({orders});
-      // });
+          // both dates and status
+          if((dateFrom && dateTo) && (status != 'none')){
+            if((orders[key].order.deliveryDate >= dateFrom) && 
+              (orders[key].order.deliveryDate <= dateTo) && 
+              (orders[key].order.status == status)
+              ){
+              filteredOrders[key] = orders[key];
+              return false;
+            }
+          }
+          // both dates, no status
+          if((dateFrom && dateTo) && (status == 'none')){
+            if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
+              filteredOrders[key] = orders[key];
+              return false;
+            }
+          }
+          // no dates, just status
+          if((!dateFrom && !dateTo) && (status != 'none')){
+            if(orders[key].order.status == status){
+              filteredOrders[key] = orders[key];
+              return false;
+            }
+          }
+        });
+        this.setState({orders: filteredOrders});
+      });
 
     }
     updateOrder(updatedOrder){
