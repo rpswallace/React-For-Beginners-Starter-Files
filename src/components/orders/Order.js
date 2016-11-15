@@ -33,7 +33,7 @@ class Order extends React.Component{
                 <li className="list-group-item"><b>Description:</b> {order.description}</li>
               </ul>
               <div className="card-block">
-                <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Details</a>
+                <a href={'/order/' + key} className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Details</a>
                 <a href="#" className="card-link" onClick={(e) => this.props.getOrderDetail(e, key) }>Edit</a>
               </div>
             </div>

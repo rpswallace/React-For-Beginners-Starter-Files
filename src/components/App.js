@@ -57,17 +57,23 @@ class App extends React.Component{
     }
     // It will runs when state or props change
     componentWillUpdate(nextProps, nextState){
+
+      // update localstorage for ordersdetails
+      // 
+      // 
         // Using {} actually will go directly to the object
+        // console.log(nextProps, nextState);
         // localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
     }
     getOrderDetail(e, key){
-      e.preventDefault();
+      // e.preventDefault();
       const orders = {...this.state.orders};
       const order = orders[key].order;
-      this.setState({
-        order: order,
-        id: key
-      })
+      localStorage.setItem(`order-${key}`, JSON.stringify(order));
+      // this.setState({
+      //   order: order,
+      //   id: key
+      // })
     }
     filterOrder(dateFrom, dateTo, status){
       // console.log(dateFrom, dateTo, status);

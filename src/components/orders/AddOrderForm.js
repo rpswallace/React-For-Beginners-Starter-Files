@@ -9,6 +9,7 @@ class AddOrderForm extends React.Component{
     this.handleProductChange = this.handleProductChange.bind(this);
     this.updateOrderAmount = this.updateOrderAmount.bind(this);
     this.renderProductList = this.renderProductList.bind(this);
+    this.removeProduct = this.removeProduct.bind(this);
     this.totalOrder = 0;
     this.orderProductList = {};
 
@@ -51,6 +52,11 @@ class AddOrderForm extends React.Component{
       document.getElementById('balance').value = balance;
     }
   }
+  removeProduct(e, key){
+    const orderProductList = {...this.state.orderProductList};
+    delete orderProductList[key];
+    this.setState({orderProductList});
+  }
   updateOrderAmount(e, price, key){
 
     const orderProductList = this.state.orderProductList;
@@ -91,6 +97,9 @@ class AddOrderForm extends React.Component{
           <td><input className="form-control" type="text" placeholder="paper color" id="desc" name="desc" /></td>
           <td><input className="form-control" type="text" placeholder="tape color" id="tape" name="tape" /></td>
           <td><input className="form-control" type="text" placeholder="paper color" id="paper" name="paper" /></td>
+          <td>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={(e) => this.removeProduct(e, key)}><span aria-hidden="true">×</span></button>
+          </td>
         </tr>
         )
     }
@@ -205,6 +214,7 @@ class AddOrderForm extends React.Component{
               <th>Description</th>
               <th>Tape Color</th>
               <th>Paper Color</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -228,7 +238,7 @@ class AddOrderForm extends React.Component{
             <label htmlFor="payment1Type" className="col-xs-12 col-form-label">Payment Type</label>
             <div className="col-xs-12">
                 <select className="form-control" ref={(input) => this.payment1Type = input} id="payment1Type" name="payment1Type"  >
-                    <option value="Chash">Cash</option>
+                    <option value="Cash">Cash</option>
                     <option value="Transfer">Transfer</option>
                 </select>
             </div>
