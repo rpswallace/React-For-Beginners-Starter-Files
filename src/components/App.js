@@ -78,7 +78,7 @@ class App extends React.Component{
     filterOrder(dateFrom, dateTo, status){
       // console.log(dateFrom, dateTo, status);
       // 
-      const filteredOrders = {};
+      var filteredOrders = {};
        
       var ref = base.database().ref("orders");
       ref.on("value", (snapshot) => {
@@ -98,18 +98,21 @@ class App extends React.Component{
             }
           }
           // both dates, no status
-          if((dateFrom && dateTo) && (status == 'none')){
+          else if((dateFrom && dateTo) && (status == 'none')){
             if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
               filteredOrders[key] = orders[key];
               return false;
             }
           }
           // no dates, just status
-          if((!dateFrom && !dateTo) && (status != 'none')){
+          else if((!dateFrom && !dateTo) && (status != 'none')){
             if(orders[key].order.status == status){
               filteredOrders[key] = orders[key];
               return false;
             }
+          }
+          else{
+            filteredOrders = orders;
           }
         });
         this.setState({orders: filteredOrders});
