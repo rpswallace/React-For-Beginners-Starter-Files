@@ -1,3 +1,7 @@
+// total needs to be plus shipping price
+// Update total/balance when user picks a product from dropdown
+// Make validations like user cannot add a order until add a product
+// payment #2 cannot be less than balance 
 import React from 'react';
 import Modal from '../utils/Modal';
 import base from '../../base';
