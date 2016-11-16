@@ -11,7 +11,7 @@ class FilterOrder extends React.Component{
   }
   render(){
       return (
-        <form ref={(input) => this.orderFilterForm = input} className="order-filter" onSubmit={(e) => this.handleSubmit(e)}>
+        <form ref={(input) => this.orderFilterForm = input} className="order-filter clearfix" onSubmit={(e) => this.handleSubmit(e)}>
           <label htmlFor="date-from" className="col-xs-3 col-sm-2 col-md-1 col-form-label">From:</label>
           <div className="col-xs-9 col-sm-4 col-md-3 ">
             <input className="form-control" ref={(input) => this.dateFrom = input} type="date" defaultValue="" id="date-from" name="dateFrom"/>
