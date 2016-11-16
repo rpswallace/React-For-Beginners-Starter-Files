@@ -1,9 +1,10 @@
-// total needs to be plus shipping price
-// Update total/balance when user picks a product from dropdown
 // Make validations like user cannot add a order until add a product
-// payment #2 cannot be less than balance 
+// payment #2 cannot be less than balance
+// Modify local variables to use state. For example: balance, total, etc
+// clean code
+// delete product confirmation
 import React from 'react';
-import Modal from '../utils/Modal';
+// import Modal from '../utils/Modal';
 import base from '../../base';
 import $ from 'jquery';
 
@@ -12,14 +13,17 @@ class AddOrderForm extends React.Component{
     super();
     this.renderProductsDropdown = this.renderProductsDropdown.bind(this);
     this.handleProductChange = this.handleProductChange.bind(this);
-    this.updateOrderAmount = this.updateOrderAmount.bind(this);
+    this.updateProductOrder = this.updateProductOrder.bind(this);
     this.renderProductList = this.renderProductList.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
     this.totalOrder = 0;
+    this.balance = 0;
     this.orderProductList = {};
 
     this.state = {
-      orderProductList: {}
+      orderProductList: {},
+      totalOrder: 0,
+      balance: 0
     }
   }
   createOrder(e){
@@ -50,12 +54,36 @@ class AddOrderForm extends React.Component{
       // Clear form inputs after submission
       this.orderForm.reset();
   }
-  updateAmounts(e){
-    let total = parseInt(document.getElementById('total').value, 10),
-      payment1 = (parseInt(document.getElementById('payment1').value, 10) || 0),
-      payment2  = (parseInt(document.getElementById('payment2').value, 10) || 0),
-      balance = total - (payment1 + payment2),
-      percentage = ((payment1 + payment2) * 100) / total,
+
+  removeProduct(e, key){
+    const orderProductList = {...this.state.orderProductList};
+    delete orderProductList[key];
+    if($.isEmptyObject(orderProductList)){
+      $('.table-striped').hide();
+      $('#product').val('');
+      this.orderProductList = [];
+    }
+    this.setState({orderProductList});
+  }
+
+  updateOrderAmounts(){
+    let orderProductList = this.orderProductList,
+      orderProductListIds = Object.keys(orderProductList) || [],
+      that = this;
+    
+    this.totalOrder = 0;
+    
+    orderProductListIds.map(function(item){
+      that.totalOrder += orderProductList[item].total;
+    });
+
+    let shippingPrice = (parseInt($('#shipping-price').val(), 10) || 0);
+    this.totalOrder += shippingPrice;
+
+    let payment1 = (parseInt($('#payment1').val(), 10) || 0),
+      payment2  = (parseInt($('#payment2').val(), 10) || 0),
+      balance = this.totalOrder - (payment1 + payment2),
+      percentage = ((payment1 + payment2) * 100) / this.totalOrder,
       tagClass = '';
 
     if(!isNaN(balance)){
@@ -71,44 +99,26 @@ class AddOrderForm extends React.Component{
       else{
         tagClass= 'tag-success';
       }
-      $('.balance').val(balance).text(balance);
-      $('span.balance').removeClass('tag-danger tag-warning tag-info tag-success').addClass(tagClass);
     }
-  }
-  removeProduct(e, key){
-    const orderProductList = {...this.state.orderProductList};
-    delete orderProductList[key];
-    if($.isEmptyObject(orderProductList)){
-      $('.table-striped').hide();
-      $('#product').val('');
-      this.orderProductList = [];
-    }
-    this.setState({orderProductList});
-  }
-  updateOrderAmount(e, price, key){
 
-    const orderProductList = this.state.orderProductList;
-    orderProductList[key].units = e.target.value || 1;
-    orderProductList[key].total = (parseInt(e.target.value || 1, 10)) * (parseInt(orderProductList[key].price, 10));
+    $('span.balance').removeClass('tag-danger tag-warning tag-info tag-success').addClass(tagClass);
+
+    this.setState({
+      totalOrder:this.totalOrder,
+      balance: balance
+    });
+  }
+
+  updateProductOrder(e, price, key){
+
+    this.orderProductList = {...this.state.orderProductList};
+    this.orderProductList[key].units = e.target.value || 1;
+    this.orderProductList[key].total = (parseInt(e.target.value || 1, 10)) * (parseInt(this.orderProductList[key].price, 10));
 
     // update state
-    this.setState({orderProductList});
+    this.setState({orderProductList: this.orderProductList});
 
-    this.totalOrder = 0;
-    const that = this;
-
-    var orderProductListIds = Object.keys(orderProductList) || [];
-    orderProductListIds.map(function(item){
-      that.totalOrder += orderProductList[item].total;
-    });
-    $('.total').val(that.totalOrder).text(that.totalOrder);
-    // $('.order-product input.unit').filter(function() { 
-    //   if($(this).val() != ""){
-    //     that.totalOrder += (parseInt($(this).val(), 10)) * (parseInt($(this).data('price'), 10));
-    //   }
-    // });
-    var balance = parseInt(document.getElementById('total').value, 10) - ((parseInt(document.getElementById('payment1').value, 10) || 0) + (parseInt(document.getElementById('payment2').value, 10) || 0));
-    $('.balance').val(balance).text(balance);
+    this.updateOrderAmounts();
   }
   renderProductList(key){
     const product = this.state.orderProductList[key];
@@ -117,7 +127,7 @@ class AddOrderForm extends React.Component{
       return(
         <tr key={key} className="order-product">
           <th scope="row">
-            <input className="form-control unit" type="text" placeholder="Units" id="units" name="units" data-price={product.price} defaultValue={product.units} onChange={(e) => this.updateOrderAmount(e,product.price, key)}/>
+            <input className="form-control unit" type="text" placeholder="Units" id="units" name="units" data-price={product.price} defaultValue={product.units} onChange={(e) => this.updateProductOrder(e, product.price, key)}/>
           </th>
           <td>{product.name}</td>
           <td>{product.price}</td>
@@ -154,7 +164,7 @@ class AddOrderForm extends React.Component{
         this.orderProductList[e.target.value] = temp;
         
         this.setState({orderProductList:this.orderProductList});
-
+        this.updateOrderAmounts();
         // $('#order-product-list').append();
         // $('#total').val(this.totalOrder);
       });
@@ -172,6 +182,8 @@ class AddOrderForm extends React.Component{
   render(){
     const productIds = Object.keys(this.props.products) || [];
     const orderProductListIds = Object.keys(this.state.orderProductList) || [];
+    const orderTotal = this.state.totalOrder; 
+    const balance = this.state.balance; 
     console.log(this.state.orderProductList);
     return (
       <form ref={(input) => this.orderForm = input} className="order-edit" onSubmit={(e) => this.createOrder(e)}>
@@ -216,7 +228,7 @@ class AddOrderForm extends React.Component{
           <div className="col-sm-6">
             <label htmlFor="shipping-price" className="col-xs-12 col-form-label">Shipping Price</label>
             <div className="col-xs-12">
-              <input className="form-control" ref={(input) => this.shippingPrice = input} type="number" placeholder="Price" id="shipping-price" name="shipping-price" />
+              <input className="form-control" ref={(input) => this.shippingPrice = input} type="number" placeholder="Price" id="shipping-price" name="shipping-price" onBlur={(e) => this.updateOrderAmounts(e)}/>
             </div>
           </div>
         </div>
@@ -271,8 +283,8 @@ class AddOrderForm extends React.Component{
           <div className="col-sm-6">
             <label htmlFor="total" className="col-xs-12 col-form-label invisible">Total</label>
             <div className="col-xs-12">
-              <input className="form-control total" ref={(input) => this.total = input} type="hidden" placeholder="Total" id="total" name="total" readOnly />
-              <h1>Total <span className="tag tag-info total">0</span></h1>
+              <input className="form-control total" ref={(input) => this.total = input} type="hidden" placeholder="Total" id="total" name="total" defaultValue={orderTotal} readOnly />
+              <h1>Total <span className="tag tag-info total">{orderTotal}</span></h1>
             </div>
           </div>
         </div>
@@ -280,7 +292,7 @@ class AddOrderForm extends React.Component{
           <div className="col-xs-6">
             <label htmlFor="payment1" className="col-xs-12 col-form-label">Payment #1</label>
             <div className="col-xs-12">
-              <input className="form-control" ref={(input) => this.payment1 = input} type="number" placeholder="Amount" id="payment1" name="payment1" onChange={(e) => this.updateAmounts(e)}/>
+              <input className="form-control" ref={(input) => this.payment1 = input} type="number" placeholder="Amount" id="payment1" name="payment1" onChange={(e) => this.updateOrderAmounts(e)}/>
             </div>
           </div>
           <div className="col-xs-6">
@@ -297,7 +309,7 @@ class AddOrderForm extends React.Component{
           <div className="col-xs-6">
             <label htmlFor="payment2" className="col-xs-12 col-form-label">Payment #2</label>
             <div className="col-xs-12">
-              <input className="form-control" ref={(input) => this.payment2 = input} type="number" placeholder="Amount" id="payment2" name="payment2" onChange={(e) => this.updateAmounts(e)}/>
+              <input className="form-control" ref={(input) => this.payment2 = input} type="number" placeholder="Amount" id="payment2" name="payment2" onChange={(e) => this.updateOrderAmounts(e)}/>
             </div>
           </div>
           <div className="col-xs-6">
@@ -314,8 +326,8 @@ class AddOrderForm extends React.Component{
           <div className="col-sm-6">
             <label htmlFor="balance" className="col-xs-12 col-form-label invisible">Balance</label>
             <div className="col-xs-12">
-              <input className="form-control balance" ref={(input) => this.balance = input} type="hidden" placeholder="Amount" id="balance" name="balance" readOnly />
-              <h1>Balance <span className="tag tag-danger balance">0</span></h1>
+              <input className="form-control balance" ref={(input) => this.balance = input} type="hidden" placeholder="Amount" id="balance" name="balance" readOnly defaultValue={balance}/>
+              <h1>Balance <span className="tag tag-danger balance">{balance}</span></h1>
             </div>
           </div>
         </div>
