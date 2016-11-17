@@ -75,6 +75,7 @@ class AddOrderForm extends React.Component{
     
     orderProductListIds.map(function(item){
       that.totalOrder += orderProductList[item].total;
+      return item;
     });
 
     let shippingPrice = (parseInt($('#shipping-price').val(), 10) || 0);
@@ -184,7 +185,7 @@ class AddOrderForm extends React.Component{
     const orderProductListIds = Object.keys(this.state.orderProductList) || [];
     const orderTotal = this.state.totalOrder; 
     const balance = this.state.balance; 
-    console.log(this.state.orderProductList);
+    // console.log(this.state.orderProductList);
     return (
       <form ref={(input) => this.orderForm = input} className="order-edit" onSubmit={(e) => this.createOrder(e)}>
         <div className="form-group row">

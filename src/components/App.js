@@ -86,27 +86,26 @@ class App extends React.Component{
         const orderIds = Object.keys(orders);
         orderIds.filter(function (key) {
 
-          
           // both dates and status
-          if((dateFrom && dateTo) && (status != 'none')){
+          if((dateFrom && dateTo) && (status !== 'none')){
             if((orders[key].order.deliveryDate >= dateFrom) && 
               (orders[key].order.deliveryDate <= dateTo) && 
-              (orders[key].order.status == status)
+              (orders[key].order.status === status)
               ){
               filteredOrders[key] = orders[key];
               return false;
             }
           }
           // both dates, no status
-          else if((dateFrom && dateTo) && (status == 'none')){
+          else if((dateFrom && dateTo) && (status === 'none')){
             if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
               filteredOrders[key] = orders[key];
               return false;
             }
           }
           // no dates, just status
-          else if((!dateFrom && !dateTo) && (status != 'none')){
-            if(orders[key].order.status == status){
+          else if((!dateFrom && !dateTo) && (status !== 'none')){
+            if(orders[key].order.status === status){
               filteredOrders[key] = orders[key];
               return false;
             }
@@ -114,6 +113,7 @@ class App extends React.Component{
           else{
             filteredOrders = orders;
           }
+          return key;
         });
         this.setState({orders: filteredOrders});
       });
