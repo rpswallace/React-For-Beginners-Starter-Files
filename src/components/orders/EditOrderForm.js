@@ -28,7 +28,7 @@ class EditOrderForm extends React.Component{
 
     const ordersRef = base.database().ref('orders');
     const timestamp = Date.now();
-    ordersRef.child(`order-${timestamp}`).set({order});
+    ordersRef.child(`order-${timestamp}`).set(order);
 
     // Clear form inputs after submission
     this.orderForm.reset();

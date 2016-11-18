@@ -49,21 +49,22 @@ class AddOrderForm extends React.Component{
 
       const ordersRef = base.database().ref('orders');
       const timestamp = Date.now();
-      ordersRef.child(`order-${timestamp}`).set({order});
+      ordersRef.child(`order-${timestamp}`).set(order);
 
       // Clear form inputs after submission
       this.orderForm.reset();
   }
 
   removeProduct(e, key){
-    const orderProductList = {...this.state.orderProductList};
-    delete orderProductList[key];
-    if($.isEmptyObject(orderProductList)){
+    this.orderProductList = {...this.state.orderProductList};
+    delete this.orderProductList[key];
+    if($.isEmptyObject(this.orderProductList)){
       $('.table-striped').hide();
       $('#product').val('');
       this.orderProductList = [];
     }
-    this.setState({orderProductList});
+    this.setState({orderProductList:this.orderProductList});
+    this.updateOrderAmounts();
   }
 
   updateOrderAmounts(){
@@ -154,25 +155,23 @@ class AddOrderForm extends React.Component{
 
         const temp = {
           id: e.target.value,
-          name: data.product.name,
-          price: data.product.price,
+          name: data.name,
+          price: data.price,
           units: 1,
           tapeColor: '',
           paperColor: '',
           desc: '',
-          total: data.product.price * 1
+          total: data.price * 1
         }
         this.orderProductList[e.target.value] = temp;
         
         this.setState({orderProductList:this.orderProductList});
         this.updateOrderAmounts();
-        // $('#order-product-list').append();
-        // $('#total').val(this.totalOrder);
       });
     }
   }
   renderProductsDropdown(key){
-    const product = this.props.products[key].product;
+    const product = this.props.products[key];
 
     if(parseInt(product.status, 10) === 1){
       return(

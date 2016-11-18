@@ -14,7 +14,7 @@ class AddProductForm extends React.Component{
 
     const productsRef = base.database().ref('products');
     const timestamp = Date.now();
-    productsRef.child(`product-${timestamp}`).set({product});
+    productsRef.child(`product-${timestamp}`).set(product);
 
     // Clear form inputs after submission
     this.productForm.reset();

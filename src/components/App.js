@@ -36,12 +36,7 @@ class App extends React.Component{
       const DbRef = base.database().ref('orders');
       DbRef.on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        
         this.setState({orders:data});
-
-        // document.getElementsByClassName('loading')[0].style.display = 'none';
-        document.getElementsByClassName('orders')[0].classList.remove('invisible');
-
       });
 
       const DbRefProduct = base.database().ref('products');
@@ -68,7 +63,7 @@ class App extends React.Component{
     getOrderDetail(e, key){
       // e.preventDefault();
       const orders = {...this.state.orders};
-      const order = orders[key].order;
+      const order = orders[key];
       localStorage.setItem(`order-${key}`, JSON.stringify(order));
       // this.setState({
       //   order: order,
@@ -88,9 +83,9 @@ class App extends React.Component{
 
           // both dates and status
           if((dateFrom && dateTo) && (status !== 'none')){
-            if((orders[key].order.deliveryDate >= dateFrom) && 
-              (orders[key].order.deliveryDate <= dateTo) && 
-              (orders[key].order.status === status)
+            if((orders[key].deliveryDate >= dateFrom) && 
+              (orders[key].deliveryDate <= dateTo) && 
+              (orders[key].status === status)
               ){
               filteredOrders[key] = orders[key];
               return false;
@@ -98,14 +93,14 @@ class App extends React.Component{
           }
           // both dates, no status
           else if((dateFrom && dateTo) && (status === 'none')){
-            if((orders[key].order.deliveryDate >= dateFrom) && (orders[key].order.deliveryDate <= dateTo)){
+            if((orders[key].deliveryDate >= dateFrom) && (orders[key].deliveryDate <= dateTo)){
               filteredOrders[key] = orders[key];
               return false;
             }
           }
           // no dates, just status
           else if((!dateFrom && !dateTo) && (status !== 'none')){
-            if(orders[key].order.status === status){
+            if(orders[key].status === status){
               filteredOrders[key] = orders[key];
               return false;
             }
