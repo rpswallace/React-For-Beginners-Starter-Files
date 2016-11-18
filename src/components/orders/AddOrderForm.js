@@ -34,15 +34,15 @@ class AddOrderForm extends React.Component{
           deliveryDate: this.deliveryDate.value,
           deliveryHour: this.deliveryHour.value,
           shippingAddress: this.shippingAddress.value,
-          shippingPrice: this.shippingPrice.value,
+          shippingPrice: Number(this.shippingPrice.value),
           shippingInCharge: this.shippingInCharge.value,
-          status: this.status.value,
-          total: this.total.value,
-          payment1: this.payment1.value,
+          status: Number(this.status.value),
+          total: Number(this.total.value),
+          payment1: Number(this.payment1.value),
           payment1Type: this.payment1Type.value,
-          payment2: this.payment2.value,
+          payment2: Number(this.payment2.value),
           payment2Type: this.payment2Type.value,
-          balance: this.balance.value,
+          balance: Number(this.balance.value),
           description: this.description.value,
           products: this.orderProductList
       }
@@ -53,6 +53,11 @@ class AddOrderForm extends React.Component{
 
       // Clear form inputs after submission
       this.orderForm.reset();
+      $('.table-striped').hide();
+      $('#product').val('');
+      this.orderProductList = [];
+      this.setState({orderProductList:this.orderProductList});
+      this.updateOrderAmounts();
   }
 
   removeProduct(e, key){
@@ -316,7 +321,7 @@ class AddOrderForm extends React.Component{
             <label htmlFor="payment2Type" className="col-xs-12 col-form-label">Payment Type</label>
             <div className="col-xs-12">
                 <select className="form-control" ref={(input) => this.payment2Type = input} id="payment2Type" name="payment2Type"  >
-                    <option value="Chash">Cash</option>
+                    <option value="Cash">Cash</option>
                     <option value="Transfer">Transfer</option>
                 </select>
             </div>
@@ -339,7 +344,7 @@ class AddOrderForm extends React.Component{
             </div>
           </div>
         </div>
-        <button id="add-order" type="submit" className="btn btn-primary" disabled>Add Order</button>
+        <button id="add-order" type="submit" className="btn btn-primary">Add Order</button>
       </form>
     )
   }
