@@ -6,8 +6,8 @@ class AddProductForm extends React.Component{
     e.preventDefault();
     const product = {
       name: this.name.value,
-      price: this.price.value,
-      status: this.status.value,
+      price: Number(this.price.value),
+      status: Number(this.status.value),
       image: this.image.value,
       type: this.type.value
     }
