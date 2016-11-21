@@ -53,7 +53,7 @@ class AddOrderForm extends React.Component{
 
       // Clear form inputs after submission
       this.orderForm.reset();
-      $('.table-striped').hide();
+      $('.table-striped').addClass('invisible');
       $('#product').val('');
       this.orderProductList = [];
       this.setState({orderProductList:this.orderProductList});
@@ -64,7 +64,7 @@ class AddOrderForm extends React.Component{
     this.orderProductList = {...this.state.orderProductList};
     delete this.orderProductList[key];
     if($.isEmptyObject(this.orderProductList)){
-      $('.table-striped').hide();
+      $('.table-striped').addClass('invisible');
       $('#product').val('');
       this.orderProductList = [];
     }
@@ -130,7 +130,7 @@ class AddOrderForm extends React.Component{
   renderProductList(key){
     const product = this.state.orderProductList[key];
     if(product){
-      $('.table-striped').show();
+      $('.table-striped').removeClass('invisible');
       return(
         <tr key={key} className="order-product">
           <th scope="row">
@@ -267,7 +267,7 @@ class AddOrderForm extends React.Component{
             </div>
           </div>
         </div>
-        <table className="table table-striped">
+        <table className="table table-striped invisible">
           <thead>
             <tr>
               <th>Units</th>
