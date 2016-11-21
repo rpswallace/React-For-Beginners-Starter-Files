@@ -9,12 +9,9 @@ class Product extends React.Component{
     }
     // This is not a specific one from React, was made separate a bit the code.
     renderProduct(key){
-        const product = this.props.products[key].product;
-        // const count = this.props.order[key];
+        const product = this.props.products[key];
         const removeButton = <button onClick={() => this.props.removeFromProduct(key)}>&times;</button>;
-
         const productStatus = (parseInt(product.status, 10)) ? 'card-success' : 'card-warning';
-            
 
         if(!product || product.status === 'unavailable'){
             return <li key={key}>Sorry, {product ? product.name : 'product'} is not longer available! {removeButton}</li>

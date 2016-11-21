@@ -9,12 +9,9 @@ class Order extends React.Component{
     }
     // This is not a specific one from React, was made separate a bit the code.
     renderOrder(key){
-        const order = this.props.orders[key].order;
-        // const count = this.props.order[key];
+        const order = this.props.orders[key];
         const removeButton = <button onClick={() => this.props.removeFromOrder(key)}>&times;</button>;
-
         const orderStatus = (parseInt(order.status, 10)) ? 'card-success' : 'card-warning';
-            
 
         if(!order || order.status === 'unavailable'){
             return <li key={key}>Sorry, {order ? order.name : 'order'} is not longer available! {removeButton}</li>

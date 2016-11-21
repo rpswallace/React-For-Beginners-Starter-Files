@@ -6,15 +6,15 @@ class AddProductForm extends React.Component{
     e.preventDefault();
     const product = {
       name: this.name.value,
-      price: this.price.value,
-      status: this.status.value,
+      price: Number(this.price.value),
+      status: Number(this.status.value),
       image: this.image.value,
       type: this.type.value
     }
 
     const productsRef = base.database().ref('products');
     const timestamp = Date.now();
-    productsRef.child(`product-${timestamp}`).set({product});
+    productsRef.child(`product-${timestamp}`).set(product);
 
     // Clear form inputs after submission
     this.productForm.reset();
