@@ -7,6 +7,7 @@ import React from 'react';
 // import Modal from '../utils/Modal';
 import base from '../../base';
 import $ from 'jquery';
+import {getBalanceNotification} from '../../helpers';
 
 class AddOrderForm extends React.Component{
   constructor() {
@@ -94,18 +95,7 @@ class AddOrderForm extends React.Component{
       tagClass = '';
 
     if(!isNaN(balance)){
-      if(percentage >= 0 && percentage <= 24){
-        tagClass= 'tag-danger';
-      }
-      else if(percentage >= 25 && percentage <= 49){
-        tagClass= 'tag-warning';
-      }
-      else if(percentage >= 50 && percentage <= 75){
-        tagClass= 'tag-info';
-      }
-      else{
-        tagClass= 'tag-success';
-      }
+      tagClass = getBalanceNotification(percentage);
     }
 
     $('span.balance').removeClass('tag-danger tag-warning tag-info tag-success').addClass(tagClass);
